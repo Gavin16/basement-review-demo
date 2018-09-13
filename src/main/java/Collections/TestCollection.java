@@ -16,8 +16,14 @@ public class TestCollection {
     public static void main(String[]args){
 //        testList();
 //        testList1();
-        testSet();
+//        testSet();
+//        testQueue();
+//        testStack();
+        testMap();
     }
+
+
+
 
     /**
      * List
@@ -54,7 +60,7 @@ public class TestCollection {
         System.out.println(strList.lastIndexOf("abcd"));
     }
 
-
+    // set
     public static void testSet(){
 
         Integer[] intArr = {12,11,12,34,34,57};
@@ -64,8 +70,85 @@ public class TestCollection {
         System.out.println(intSet);
 
         // set中元素排序
-        
+        intSet.add(27);
 
+        System.out.println(intSet.contains(11));
+        System.out.println(intSet.size());
+    }
+
+
+    // 队列queue的使用，队列大小
+    public static void testQueue(){
+        Queue<String> strQueue = new LinkedList<String>();
+
+        strQueue.offer("sffs");
+        strQueue.offer("ege");
+        strQueue.offer("rrbtr");
+        strQueue.offer("erte");
+
+        for(String e : strQueue){
+            System.out.println(e);
+        }
+
+        System.out.println(strQueue.poll());
+        System.out.println(strQueue);
+        System.out.println(strQueue.peek());
+        strQueue.offer("hello");
+        System.out.println(strQueue);
+
+        System.out.println(strQueue.element());
+        System.out.println(strQueue);
+
+        System.out.println(strQueue.size());
+
+
+    }
+
+    /** stack */
+    private static void testStack(){
+        Stack<String> strStack = new Stack<>();
+
+        strStack.push(" world");
+        strStack.push("hello");
+
+        System.out.println(strStack.empty());
+
+        System.out.println(strStack);
+        System.out.println(strStack.peek());
+        System.out.println(strStack.pop());
+
+        System.out.println(strStack.peek());
+    }
+
+
+    /** Map */
+    private static void testMap(){
+        Map<String,String> map = new HashMap<>();
+        map.put("1","abc");
+        map.put("2","def");
+        map.put("3","ref");
+        map.put("4","sed");
+
+        Collection<String> valueList = map.values();
+        Iterator<String> it = valueList.iterator();
+        while(it.hasNext()){
+            String str = it.next();
+            System.out.println(str);
+        }
+
+        Set<String> strSet = new HashSet<>(valueList);
+        System.out.println(strSet);
+
+        // 将 key 对应的 oldValue 置换为 newValue
+        map.replace("1","abc","123");
+        System.out.println(map.keySet());
+        System.out.println(map.values());
+
+        // 若key 确实存在映射，则将key对应的映射值置换为 value
+        String res = map.replace("1","233");
+        System.out.println(res);
+        System.out.println(map.keySet());
+        System.out.println(map.values());
 
     }
 }
