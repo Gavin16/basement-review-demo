@@ -13,5 +13,16 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-    
+
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+        <!-- Apache POI - Java API To Access Microsoft Format Files -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.16</version>
+        </dependency>
+
+    </dependencies>
 </project>
