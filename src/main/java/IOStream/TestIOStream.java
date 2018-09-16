@@ -2,6 +2,8 @@ package IOStream;
 
 import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Title: ${FILE_NAME}
@@ -52,11 +54,15 @@ public class TestIOStream {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
 
     /**
      * ByteArrayInputStream的使用
+     *
+     * ByteArrayInputStream 通过构造方法从 byte数组中获取数据构造一个输入流
+     *      类似的ByteArrayInputStream 也是通过几个read方法将数据写入到buffer 数组中
+     *      如果所有数据都在byte 数组从可以通过这种方式构造输入流
      */
     private static void testIOStream1(){
         // ByteArrayInputStream
@@ -69,25 +75,24 @@ public class TestIOStream {
         // 使用try - with - resource 语句 自动关闭输入流
         try{
             FileInputStream fin = new FileInputStream(f);
-            // FileInputStream 中提取byte数组\
-            byte[]buffer1 = new byte[1024];
-            byte[]buffer2 = new byte[1024];
+            // FileInputStream 中提取byte数组
+            // 取大一点 一次性保存所有从文件中读取的
+            byte[]buffer1 = new byte[10240];
+            byte[]buffer2 = new byte[10240];
 
-            ByteArrayInputStream bis = new ByteArrayInputStream(buffer2);
-
+            ByteArrayInputStream bis = null;
             int len = -1;
+            int pos = 0;
             while((len = fin.read(buffer1))!=-1){
                 // 读取出来的数据转存到 ByteArrayInputStream
-                bis.read(buffer1,0,len);
+                bis = new ByteArrayInputStream(buffer1);
+                // 从 ByteArrayInputStream中读取数据到 buffer2 中
+                bis.read(buffer2,pos,len);
+                pos += len;
             }
-            String buff1str = new String();
-            System.out.println("buffer1:"+buff1str);
+            String buff2str = new String(buffer2);
+            System.out.println("buffer2:"+buff2str);
             // 读取ByteArrayInputStream 后将字节数组的数据再写出
-
-
-            String textrd = new String(buffer2);
-            System.out.println(textrd);
-
             bis.close();
         }catch (FileNotFoundException e){
             e.printStackTrace();
@@ -98,10 +103,13 @@ public class TestIOStream {
     }
 
 
+
     private static void showURL(URL url){
         System.out.println("File:"+url.getFile());
         System.out.println("Path:"+url.getPath());
         System.out.println("authority:"+url.getAuthority());
+        System.out.println("host:"+url.getHost());
+        System.out.println("port:"+url.getPort());
         System.out.println("++++++++++++++++++++");
     }   
 
@@ -134,9 +142,48 @@ public class TestIOStream {
 
     /**
      * 字符流 IO Stream
+     *  Reader ----- PipedReader
+     *           |
+     *           --- CharArrayReader
+     *           |
+     *           ---  StringReader
+     *           |
+     *           ---  InputStreamReader
+     *           |
+     *           ---  BufferedReader
+     *           |
+     *           ---  FilterReader
+     *
+     *  按流的方向分为：输入流和输出流
+     *  按流的数据单位不同分为：字节流和字符流
+     *  按流的功能不同分为:节点流和处理流
+     *
+     *
      */
     private static void testCharIOStream(){
+        // InputStreamReader
+        URL url = TestIOStream.class.getClassLoader().getResource("iotest2.txt");
+        File f = new File(url.getPath());
+        try {
+            FileInputStream fis = new FileInputStream(f);
 
+            // 从InputStreamReader中读取字符
+            InputStreamReader isr = new InputStreamReader(fis);
+
+            BufferedReader bd = new BufferedReader(isr);
+            String str = "";
+
+            while(null !=(str = bd.readLine())){
+                System.out.println(str);
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
     }
 
 
