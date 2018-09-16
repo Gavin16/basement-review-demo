@@ -16,7 +16,8 @@ public class TestIOStream {
 
     public static void main(String[]args){
 //        testIOStream();
-        testIOStream1();
+//        testIOStream1();
+        testCharIOStream();
     }
 
     /** 字节流 输入输出流
@@ -169,7 +170,7 @@ public class TestIOStream {
 
             // 从InputStreamReader中读取字符
             InputStreamReader isr = new InputStreamReader(fis);
-
+            // 使用 缓冲流来对
             BufferedReader bd = new BufferedReader(isr);
             String str = "";
 
