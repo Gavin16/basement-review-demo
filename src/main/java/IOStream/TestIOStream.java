@@ -2,8 +2,6 @@ package IOStream;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @Title: ${FILE_NAME}
@@ -17,7 +15,10 @@ public class TestIOStream {
     public static void main(String[]args){
 //        testIOStream();
 //        testIOStream1();
-        testCharIOStream();
+//        testCharIOStream();
+//        testBufferInputStream();
+//        testBufferedWriter();
+        testDataInputStream();
     }
 
     /** 字节流 输入输出流
@@ -74,8 +75,8 @@ public class TestIOStream {
         File f  = new File(url.getFile());
 
         // 使用try - with - resource 语句 自动关闭输入流
-        try{
-            FileInputStream fin = new FileInputStream(f);
+        try(FileInputStream fin = new FileInputStream(f)){
+
             // FileInputStream 中提取byte数组
             // 取大一点 一次性保存所有从文件中读取的
             byte[]buffer1 = new byte[10240];
@@ -158,34 +159,100 @@ public class TestIOStream {
      *  按流的方向分为：输入流和输出流
      *  按流的数据单位不同分为：字节流和字符流
      *  按流的功能不同分为:节点流和处理流
-     *
-     *
      */
     private static void testCharIOStream(){
         // InputStreamReader
         URL url = TestIOStream.class.getClassLoader().getResource("iotest2.txt");
         File f = new File(url.getPath());
-        try {
-            FileInputStream fis = new FileInputStream(f);
-
-            // 从InputStreamReader中读取字符
+        try(FileInputStream fis = new FileInputStream(f);
             InputStreamReader isr = new InputStreamReader(fis);
-            // 使用 缓冲流来对
-            BufferedReader bd = new BufferedReader(isr);
+            BufferedReader bd = new BufferedReader(isr)) {
+            // 从InputStreamReader中读取字符
             String str = "";
-
             while(null !=(str = bd.readLine())){
                 System.out.println(str);
             }
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 字节流缓冲流
+     * 字节输入缓冲流，字节输出缓冲流
+     */
+    private static void testBufferInputStream(){
+        URL url = TestIOStream.class.getClassLoader().getResource("iotest2.txt");
+
+        // 使用缓冲流读取输入数据
+        try(FileInputStream fis = new FileInputStream(new File(url.getPath()));
+            BufferedInputStream bis = new BufferedInputStream(fis)){
+            int len = -1;
+            byte[] buffer = new byte[1024];
+            while((len = bis.read(buffer)) != -1){
+                System.out.println(new String(buffer,0,len));
+            }
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *  字符输入/输出缓冲流
+     *  注意：往文件中写数据时,由于是maven项目实际打开的文件是 target/classes 中的文件
+     */
+    private static void testBufferedWriter(){
+        URL url2 = TestIOStream.class.getClassLoader().getResource("iotest2.txt");
+        URL url1 = TestIOStream.class.getClassLoader().getResource("iotest1.txt");
+
+        try (FileWriter fw = new FileWriter(new File(url2.getFile()),true);
+                BufferedWriter bw = new BufferedWriter(fw);
+                FileReader fr = new FileReader(new File(url1.getPath()));
+                BufferedReader br = new BufferedReader(fr)){
+
+            String writeToFile = "testBufferedWriter文件添加";
+            bw.newLine();
+            bw.write(writeToFile);
+            bw.flush();
+            bw.close();
+            // 从文件中读取字符
+            char[] readChars = new char[1024];
+            int len = -1;
+            while((len=br.read(readChars)) != -1){
+                System.out.println(new String(readChars,0,len));
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
-
         }
     }
 
 
+    /**
+     * 数据包装流
+     */
+    private static void testDataInputStream(){
+        URL url = TestIOStream.class.getClassLoader().getResource("iotest2.txt");
+        File f = new File(url.getFile());
+
+        try(FileInputStream fis = new FileInputStream(f);
+            DataInputStream dis = new DataInputStream(fis)){
+            byte[] bytesin = new byte[1024];
+            int len = -1;
+            while((len = dis.read(bytesin))!= -1){
+                System.out.println(new String(bytesin,0,len));
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 }
