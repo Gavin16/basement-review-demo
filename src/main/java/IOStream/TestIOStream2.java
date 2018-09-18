@@ -1,7 +1,10 @@
 package IOStream;
 
+import domain.PersonDto;
+
 import java.io.*;
 import java.net.URL;
+import java.util.Date;
 
 /**
  * @Title: ${FILE_NAME}
@@ -13,9 +16,11 @@ import java.net.URL;
 public class TestIOStream2 {
 
     public static void main(String[]args)throws IOException{
-        TestStream();
-        test01();
-        test02();
+//        TestStream();
+//        test01();
+//        test02();
+        testObjectInputStream();
+        testObjectOutputStream();
     }
 
     /**
@@ -125,4 +130,72 @@ public class TestIOStream2 {
         }
 
     }
+
+    /**
+     *  ObjectOutputStream 和 ObejctInputStream
+     *  对象的序列化 和 反序列化
+     */
+    private static void testObjectInputStream()throws IOException{
+        String url = "D:\\temp\\person.dat";
+        File f = new File(url);
+
+        if(!f.exists()){
+            f.createNewFile();
+        }
+
+        try(FileOutputStream fos = new FileOutputStream(f);
+            ObjectOutputStream oos = new ObjectOutputStream(fos)){
+            PersonDto person = new PersonDto("zhsan",new Date(),"27");
+            // 新建的对象序列化到本地
+            oos.writeObject(person);
+
+            // 从本地读取
+            FileInputStream fis = new FileInputStream(f);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            // 读取出来的对象需要做强制类型转换
+            PersonDto p = (PersonDto)ois.readObject();
+
+            System.out.println(String.valueOf(p));
+            fos.close();
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * transient 属性不能序列化
+     * 静态属性不能序列化
+     * @throws IOException
+     */
+    private static void testObjectOutputStream()throws IOException{
+        String url = "D:\\temp\\person.dat";
+        File f = new File(url);
+
+        if(!f.exists()){
+            f.createNewFile();
+        }
+
+        // 读取序列化后的结果
+        try (FileOutputStream fos = new FileOutputStream(f);
+             ObjectOutputStream oos = new ObjectOutputStream(fos);
+             FileInputStream fis = new FileInputStream(f);
+             ObjectInputStream ois = new ObjectInputStream(fis)){
+
+            PersonDto person = new PersonDto("刘大腕",new Date(),"22");
+            oos.writeObject(person);
+
+            PersonDto.setHeight("182");
+
+            PersonDto pp = (PersonDto)ois.readObject();
+            System.out.println(pp.getHeight());
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

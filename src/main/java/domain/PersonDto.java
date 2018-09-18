@@ -1,5 +1,6 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,13 +10,34 @@ import java.util.Date;
  * @author: Eta
  * @date: 2018/9/13 22:43
  */
-public class PersonDto {
+public class PersonDto implements Serializable {
 
-    private String name;
+    private static final long serialVersionUID = 1L;
 
-    private Date birthday;
+    private String name = "张三";
+
+    private transient Date birthday;
 
     private String age;
+
+    public static String height = "177";
+
+    public static String getHeight() {
+        return height;
+    }
+
+    public static void setHeight(String height) {
+        PersonDto.height = height;
+    }
+
+    public PersonDto() {
+    }
+
+    public PersonDto(String name, Date birthday, String age) {
+        this.name = name;
+        this.birthday = birthday;
+        this.age = age;
+    }
 
     public String getName() {
         return name;
