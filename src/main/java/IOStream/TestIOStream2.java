@@ -117,6 +117,8 @@ public class TestIOStream2 {
              FileOutputStream fos = new FileOutputStream(fw);
              BufferedOutputStream bos = new BufferedOutputStream(fos)){
 
+//            FileOutputStream fos1 = new FileOutputStream("");
+
             byte[] bs = new byte[1024];
             int len = -1;
             while((len=(bis.read(bs)))!=-1){

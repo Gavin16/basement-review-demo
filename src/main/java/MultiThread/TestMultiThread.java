@@ -21,6 +21,7 @@ public class TestMultiThread {
      * System.currentTimeMillis()
      * System.lineSeparator()
      * System.nanoTime()
+     * System.arraycopy()  数组拷贝
      * System.getProperties() 获取所有property属性
      */
     private static void testSystem(){
