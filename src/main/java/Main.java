@@ -7,25 +7,18 @@ import java.util.Date;
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        // test String intern method
 
-        // Gson
-        PersonDto pd = new PersonDto();
-        pd.setAge("27");;
-        pd.setBirthday(new Date());
-        pd.setName("sdf");
+        String str1 = "Hello there";
 
+        String str2 = "Hello there";
 
-        Gson gson = new Gson();
-        String jsonStr = gson.toJson(pd);
+        String str3 = "Hello there".intern();
 
-        System.out.println(jsonStr);
+        String str4 = "Hello" + new String("there");
 
-        String jstr = "{\"name\":\"sdf\",\"birthday\":\"Sep 13, 2018 10:48:44 PM\",\"age\":\"27\"}";
-        PersonDto pdr = gson.fromJson(jstr,PersonDto.class);
+        String str5 = "Hello" + " there";
 
-        System.out.println(pdr.toString());
-        Gson gson1 = new GsonBuilder().create();
-
+        System.out.println(str1 == str5);
     }
 }

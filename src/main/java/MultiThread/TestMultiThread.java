@@ -13,6 +13,21 @@ import java.util.Properties;
 public class TestMultiThread {
     public static void main(String[]args){
 //        testSystem();
+//        TheadPriorityTest();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.printf("2.Welcome! This is %s.%n", Thread.currentThread());
+            }
+        });
+
+        System.out.println(Thread.currentThread().getPriority());
+
+        thread.setName("Thread-Test");
+        thread.start();
+        thread.run();
+        System.out.printf("1.Welcome! This is %s.%n", Thread.currentThread());
+
     }
 
     /**
@@ -41,8 +56,19 @@ public class TestMultiThread {
         // System中获取系统换行符
         String lineSperator = System.lineSeparator();
 
+        System.out.println(Thread.currentThread().getState());
     }
 
+
+    private static void TheadPriorityTest(){
+        Thread thread = Thread.currentThread();
+        thread.setPriority(Thread.MIN_PRIORITY);
+        System.out.println("hello");
+        System.out.println(thread.getPriority());
+        System.out.println(Thread.MAX_PRIORITY);
+        System.out.println(thread.getUncaughtExceptionHandler());
+        thread.start();
+    }
 
 
 
